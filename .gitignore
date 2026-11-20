@@ -7,3 +7,5 @@ target/
 *.log
 .idea/
 .vscode/
+
+*.tsbuildinfo
