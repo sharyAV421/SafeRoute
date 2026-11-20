@@ -1,0 +1,12 @@
+{
+  "name": "saferoute-mockups",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Prototipos navegables locales de SafeRoute",
+  "scripts": {
+    "capturar": "node capturar.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.55.0"
+  }
+}
