@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.web.cors.*;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration @EnableMethodSecurity
@@ -26,6 +27,11 @@ public class SecurityConfig {
    .requestMatchers(HttpMethod.GET,"/api/riesgos/niveles").permitAll().anyRequest().authenticated());
   http.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class);
   return http.build();
+ }
+ @Bean FilterRegistrationBean<JwtFilter> jwtFilterServletRegistration(JwtFilter filter){
+  FilterRegistrationBean<JwtFilter> registration=new FilterRegistrationBean<>(filter);
+  registration.setEnabled(false);
+  return registration;
  }
  @Bean PasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();}
  @Bean AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)throws Exception{return configuration.getAuthenticationManager();}

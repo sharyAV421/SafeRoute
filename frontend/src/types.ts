@@ -7,6 +7,7 @@ export type EstadoDisponibilidad = 'DISPONIBLE'|'NO_DISPONIBLE';
 export type TipoCaracteristicaRiesgo = 'SUSTANCIAS_QUIMICAS'|'GAS'|'ELECTRICIDAD'|'MATERIALES_INFLAMABLES'|'RIESGO_BIOLOGICO'|'MAQUINARIA_EQUIPOS'|'RIESGO_ESTRUCTURAL'|'ALTA_OCUPACION'|'OTRO';
 
 export interface Usuario { id: string; nombre: string; correo: string; rol: Role; }
+export interface AuthSession extends Usuario { token: string; }
 export interface Institucion { id: string; nombre: string; descripcion?: string; }
 export interface Edificio { id: string; institucionId: string; nombre: string; descripcion?: string; }
 export interface Piso { id: string; edificioId: string; nombre: string; nivel?: number; }

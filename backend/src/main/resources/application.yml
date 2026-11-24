@@ -18,5 +18,6 @@ saferoute:
   cors-origin: ${CORS_ORIGIN:http://localhost:5173}
   bootstrap-admin-email: ${SAFEROUTE_BOOTSTRAP_ADMIN_EMAIL:}
   bootstrap-admin-password: ${SAFEROUTE_BOOTSTRAP_ADMIN_PASSWORD:}
+  admin-reset-password: ${SAFEROUTE_ADMIN_RESET_PASSWORD:}
   jwt-secret: ${SAFEROUTE_JWT_SECRET:}
   jwt-ttl-minutes: ${SAFEROUTE_JWT_TTL_MINUTES:20}

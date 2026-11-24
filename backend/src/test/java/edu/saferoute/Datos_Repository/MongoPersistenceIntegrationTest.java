@@ -16,6 +16,12 @@ import org.springframework.test.context.DynamicPropertySource;
 import edu.saferoute.Modelo_de_Dominio.Institucion;
 import edu.saferoute.Modelo_de_Dominio.Conexion;
 import edu.saferoute.Modelo_de_Dominio.*;
+import edu.saferoute.configuracion.AdminBootstrap;
+import edu.saferoute.configuracion.MongoUserDetailsService;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * Opt-in integration test against a dedicated MongoDB test database.
@@ -50,6 +56,32 @@ class MongoPersistenceIntegrationTest {
             assertEquals(nombre, instituciones.findById(saved.id()).orElseThrow().nombre());
         } finally {
             instituciones.deleteById(saved.id());
+        }
+    }
+
+    @Test
+    void bootstrapsAdminAndAuthenticatesPersistedPasswordWithSpringSecurity() {
+        String email = "mongo-admin-" + UUID.randomUUID() + "@example.edu";
+        String password = "Test-" + UUID.randomUUID() + "-Aa9!";
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        try {
+            new AdminBootstrap(usuarios, encoder, email, password, "")
+                    .run(new org.springframework.boot.DefaultApplicationArguments(new String[0]));
+
+            Usuario admin = usuarios.findByCorreo(email).orElseThrow();
+            assertEquals(Rol.ADMINISTRADOR, admin.rol());
+            assertTrue(encoder.matches(password, admin.passwordHash()));
+
+            DaoAuthenticationProvider provider = new DaoAuthenticationProvider(new MongoUserDetailsService(usuarios));
+            provider.setPasswordEncoder(encoder);
+            var authenticated = new ProviderManager(provider).authenticate(
+                    new UsernamePasswordAuthenticationToken(email, password));
+
+            assertEquals(email, authenticated.getName());
+            assertTrue(authenticated.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals(Rol.ADMINISTRADOR.name())));
+        } finally {
+            usuarios.findByCorreo(email).ifPresent(admin -> usuarios.deleteById(admin.id()));
         }
     }
 

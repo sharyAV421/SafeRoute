@@ -10,7 +10,36 @@
 
 1. Configura `MONGODB_URI`, `SAFEROUTE_JWT_SECRET` (secreto aleatorio de al menos 32 bytes), `CORS_ORIGIN` y opcionalmente `SERVER_PORT` en el entorno del backend.
 2. Para la primera puesta en marcha, define temporalmente `SAFEROUTE_BOOTSTRAP_ADMIN_EMAIL` y `SAFEROUTE_BOOTSTRAP_ADMIN_PASSWORD` (mínimo 12 caracteres). La aplicación crea esa cuenta solo si el correo no existe. Retira ambas variables tras iniciar el backend correctamente.
-3. Copia `frontend/.env.example` a `frontend/.env.local` y establece `VITE_API_URL`. Este archivo local está excluido de Git.
+3. Para restablecer una sola vez la contraseña de un administrador existente, define `SAFEROUTE_BOOTSTRAP_ADMIN_EMAIL` con el correo de la cuenta y `SAFEROUTE_ADMIN_RESET_PASSWORD` con la nueva contraseña (mínimo 12 caracteres). No configures `SAFEROUTE_BOOTSTRAP_ADMIN_PASSWORD` a la vez. Arranca el backend una vez y elimina `SAFEROUTE_ADMIN_RESET_PASSWORD` del entorno inmediatamente después. El restablecimiento falla si el correo no existe o no tiene rol `ADMINISTRADOR`; no crea usuarios. El hash usa el mismo `PasswordEncoder` de BCrypt utilizado por el login.
+4. Copia `frontend/.env.example` a `frontend/.env.local` y establece `VITE_API_URL`. Este archivo local está excluido de Git.
+
+Para ingresar la contraseña de restablecimiento en PowerShell sin mostrarla, usa una entrada oculta con `Read-Host -AsSecureString` y transfiérela en memoria a `SAFEROUTE_ADMIN_RESET_PASSWORD`; no la escribas en archivos ni Git. Después del primer arranque exitoso, elimina esa variable antes de cualquier reinicio.
+
+Ejemplo de restablecimiento de una sola ejecución (detén primero cualquier instancia previa; `MONGODB_URI` y `SAFEROUTE_JWT_SECRET` deben estar configuradas en esa misma sesión):
+
+```powershell
+$env:SAFEROUTE_BOOTSTRAP_ADMIN_EMAIL = 'ejemplo1@gmail.com'
+$secure = Read-Host 'Nueva contraseña del administrador' -AsSecureString
+$pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+try {
+    $env:SAFEROUTE_ADMIN_RESET_PASSWORD = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer)
+} finally {
+    [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer)
+    $secure.Dispose()
+}
+cd backend
+mvn spring-boot:run
+```
+
+Cuando Spring Boot indique que inició correctamente, detén esa ejecución con `Ctrl+C`, elimina las variables y arranca normalmente:
+
+```powershell
+Remove-Item Env:SAFEROUTE_ADMIN_RESET_PASSWORD
+Remove-Item Env:SAFEROUTE_BOOTSTRAP_ADMIN_EMAIL
+mvn spring-boot:run
+```
+
+Para probar sin mostrar la contraseña ni el JWT, solicita la contraseña con entrada oculta, llama `POST /api/auth/login`, y usa el token solo en memoria para `GET /api/usuarios`. Comprueba que la respuesta de login tenga `rol` igual a `ADMINISTRADOR` y que la consulta protegida responda `200`; no imprimas `$session` ni el token.
 
 Spring Boot no lee `.env` automáticamente; establece variables en el entorno del proceso. El `.env.example` raíz documenta nombres y valores de ejemplo solamente.
 
@@ -47,6 +76,8 @@ npm run build
 ```
 
 Las pruebas de servicio del backend cubren exclusión de bloqueos, desempate determinista y prioridad no determinable mientras falte la fórmula. Para pruebas con persistencia se necesita una instancia MongoDB de prueba; no se crea información ficticia.
+
+La prueba opcional de autenticación real con MongoDB se activa con `MONGODB_TEST_URI` apuntando a una base aislada. Crea y elimina un administrador temporal, valida la contraseña mediante el proveedor real de Spring Security y confirma el rol. Para probar la API tras el restablecimiento, `POST /api/auth/login` debe responder con rol `ADMINISTRADOR` y token; usa ese token en `GET /api/usuarios` para comprobar autenticación y autorización. No imprimas ni registres el token.
 
 ## Alcance implementado y pendientes
 
