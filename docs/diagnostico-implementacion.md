@@ -114,6 +114,4 @@ SafeRoute/
 
 No se generó esta estructura porque la instrucción es presentar el diagnóstico antes de programar y las decisiones de negocio continúan pendientes. Los directorios `docs/` y los mockups existentes no se han modificado.
 
-## 5. Aprobaciones solicitadas
 
-Para avanzar a un esqueleto sin reglas funcionales basta aprobar la estructura propuesta. Para implementar evacuación, confirmar o corregir cada propuesta A–E (prioridad, algoritmo/objetivo de ruta, semántica de bloqueo, desempate y tiempo). También hace falta una fuente aprobada de RF-01…RF-20 completos y resolver la discrepancia sobre catálogo de niveles de riesgo. Hasta entonces, el diagnóstico no crea código ejecutable ni configura conexión a Atlas.
