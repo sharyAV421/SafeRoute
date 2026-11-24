@@ -72,12 +72,11 @@ El backend se estructura en capas que separan las responsabilidades del sistema:
 La presentación reúne los diagramas de arquitectura y diseño de software elaborados para SafeRoute.
 
 <p align="center">
-  <a href="PEGAR_AQUI_EL_ENLACE_DE_CANVA">
+  <a href="https://canva.link/t7kk75b34ig8g39">
     <img src="https://img.shields.io/badge/Canva-Ver%20presentaci%C3%B3n%20de%20diagramas-7B2FF7?style=for-the-badge&logo=canva&logoColor=white" alt="Ver presentación de diagramas en Canva"/>
   </a>
 </p>
 
-> **Enlace de Canva:** reemplazar `PEGAR_AQUI_EL_ENLACE_DE_CANVA` por el enlace de visualización de la presentación.
 
 ## Repositorio
 
