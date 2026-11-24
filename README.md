@@ -77,6 +77,18 @@ La presentación reúne los diagramas de arquitectura y diseño de software elab
   </a>
 </p>
 
+## Diagramas UML
+
+Los archivos editables originales de Visual Paradigm están disponibles en [`docs/diagramas/`](docs/diagramas/).
+
+| N.º | Vista | Descripción | Archivo editable |
+| ---: | --- | --- | --- |
+| 1 | Contexto | Presenta los actores de SafeRoute y sus interacciones con el sistema. | [Vista_Contexto.vpp](https://github.com/sharyAV421/SafeRoute/blob/main/docs/diagramas/Vista_Contexto.vpp) |
+| 2 | Funcional — Componentes | Muestra los componentes funcionales y sus interfaces y relaciones. | [Vista_Funcional_Componentes.vpp](https://github.com/sharyAV421/SafeRoute/blob/main/docs/diagramas/Vista_Funcional_Componentes.vpp) |
+| 3 | Lógica — Clases | Describe las clases del dominio, sus datos, operaciones y relaciones. | [Vista_Logica_Clases.vpp](https://github.com/sharyAV421/SafeRoute/blob/main/docs/diagramas/Vista_Logica_Clases.vpp) |
+| 4 | Desarrollo | Organiza los módulos de frontend, las capas del backend y el dominio. | [Vista_Desarrollo.vpp](https://github.com/sharyAV421/SafeRoute/blob/main/docs/diagramas/Vista_Desarrollo.vpp) |
+| 5 | Despliegue | Representa los dispositivos, entornos de ejecución, artefactos y conexiones de despliegue. | [Vista_Despliegue.vpp](https://github.com/sharyAV421/SafeRoute/blob/main/docs/diagramas/Vista_Despliegue.vpp) |
+
 
 ## Repositorio
 
